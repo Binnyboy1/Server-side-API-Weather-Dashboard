@@ -3,8 +3,7 @@ Global attributes begin here
 */
 :root {
     --primary: #7f47af;
-    --primary50: #7e47ae80;
-    --secondary: #bd2076;
+    --secondary: #501b7e;
     --light: #e3dce9;
     --dark: #21142c;
     --invis: #ffffff00;
@@ -18,10 +17,13 @@ Global attributes begin here
 Header starts here
 */
 header {
-    background-image: linear-gradient(to right, var(--primary50), var(--primary));
+    background-image: linear-gradient(to right, var(--secondary), var(--primary));
     border-bottom: 10px solid var(--primary);
-    color: var(--secondary);
     padding: 16px 0;
+}
+
+header * {
+    color: var(--light);
 }
 
 h1 {

@@ -2,9 +2,10 @@
 // search history as an empty array
 var historyArr = [];
 // weather api root url
-var apiURL = "";
+// var apiURL = "";
 // api key
-var apiKEY = "";
+var apiKey = "56ad1233636b0bba431cc36ab67b1e36";
+var workingKey = "bdd27e1d7a97f67b1f92d2980334ed0f";
 
 // DOM element references
 // search form
@@ -17,7 +18,7 @@ var weatherEl = document.querySelector('#weather');
 var forecastEl = document.querySelector('#forecast');
 // search history container
 var searchHistoryEl = document.querySelector('#history');
-
+// submit button
 var submitButton = document.querySelector('#submit');
 
 
@@ -68,7 +69,6 @@ function renderSearchHistory() {
     // append those elements somewhere
   
     // give them their appropriate content
-  
   }
   
   // Function to display a FORECAST card given an object (from our renderForecast function) from open weather api ❌
@@ -88,40 +88,78 @@ function renderSearchHistory() {
   
   // Function to display 5 day forecast. ❌
   function renderForecast(dailyForecast) {
-  // set up elements for this section
+    // set up elements for this section
+
+    // append
     
-  // append
+    // loop over dailyForecast
   
-  // loop over dailyForecast
+    // for (var i = 0; i < dailyForecast.length; i++) {
   
-    for (var i = 0; i < dailyForecast.length; i++) {
-  
-      // send the data to our renderForecast function as an argument
-          renderForecastCard(dailyForecast[i]);
-    }
+    //   // send the data to our renderForecast function as an argument
+    //       renderForecastCard(dailyForecast[i]);
   }
   
+  // ✅
   function renderItems(city, data) {
-    renderCurrentWeather(city, data.list[0]);
-    renderForecast(data.list);
+    console.log(data);
+    renderCurrentWeather(city, data);
+    renderForecast(data);
   }
   
   // Fetches weather data for given location from the Weather Geolocation
-  // endpoint; then, calls functions to display current and forecast weather data. ❌
+  // endpoint; then, calls functions to display current and forecast weather data. ✅
   function fetchWeather(location) {
-    // varialbles of longitude, latitude, city name - coming from location
+    // variables of longitude, latitude, city name - coming from location
+    var lat = location[0].lat;
+    var lon = location[0].lon;
+    var city = location[0].name;
   
     // api url
+    var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon +"&exclude=hourly,daily&appid=" + workingKey;
   
-    // fetch, using the api url, .then that returns the response as json, .then that calls renderItems(city, data)
-  
+    // fetch, using the api url
+    fetch(weatherUrl)
+      // .then that returns the response as json
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      // .then that calls renderItems(city, data)
+      .then(function (data) {
+        if (data.length !== 0) {
+          renderItems(city, data);
+        }
+      })
+      .catch(function (error) {
+        alert("Weather error: \n" + error);
+      });
   }
-  
+
+  // ✅
   function fetchCoords(search) {
-    // variable for you api url
+    // variable for your api url
+    var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=" + workingKey;
   
-    // fetch with your url, .then that returns the response in json, .then that does 2 things - calls appendToHistory(search), calls fetchWeather(the data)
-    appendToHistory(search);
+    // fetch with your url
+    fetch(geoUrl)
+      // .then that returns the response in json
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      // .then that does 2 things - calls appendToHistory(search), calls fetchWeather(the data)
+      .then(function (data) {
+        if (data.length !== 0) {
+          appendToHistory(search);
+          fetchWeather(data);
+        }
+      })
+      .catch(function (error) {
+        alert("GeoLocation error: \n" + error);
+      });
   }
   
   // ✅
