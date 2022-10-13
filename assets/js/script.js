@@ -18,8 +18,10 @@ var forecastEl = document.querySelector('#forecast');
 // search history container
 var searchHistoryEl = document.querySelector('#history');
 
+var submitButton = document.querySelector('#submit');
 
-// Function to display the search history list.
+
+// Function to display the search history list. ✅
 function renderSearchHistory() {
     // empty the search history container
     searchHistoryEl.innerHTML = "";
@@ -31,27 +33,31 @@ function renderSearchHistory() {
     }
   }
   
-  // Function to update history in local storage then updates displayed history.
+  // Function to update history in local storage then updates displayed history. ✅
   function appendToHistory(search) {
     // push search term into search history array
+    historyArr.push(search);
   
     // set search history array to local storage
+    localStorage.setItem("history", JSON.stringify(historyArr));
     renderSearchHistory();
   }
   
-  // Function to get search history from local storage
+  // Function to get search history from local storage ✅
   function initSearchHistory() {
     // get search history item from local storage
     var historyItem = JSON.parse(localStorage.getItem("history"));
 
     // set search history array equal to what you got from local storage
-    for (var i = 0; i < historyItem.length; i++) {
+    if (historyItem !== null) {
+      for (var i = 0; i < historyItem.length; i++) {
         historyArr[i] = historyItem[i];
+      }
+      renderSearchHistory();
     }
-    renderSearchHistory();
   }
   
-  // Function to display the CURRENT weather data fetched from OpenWeather api.
+  // Function to display the CURRENT weather data fetched from OpenWeather api. ❌
   function renderCurrentWeather(city, weather) {
     // Store response data from our fetch request in variables
       // temperature, wind speed, etc.
@@ -65,7 +71,7 @@ function renderSearchHistory() {
   
   }
   
-  // Function to display a FORECAST card given an object (from our renderForecast function) from open weather api
+  // Function to display a FORECAST card given an object (from our renderForecast function) from open weather api ❌
   // daily forecast.
   function renderForecastCard(forecast) {
     // variables for data from api
@@ -80,7 +86,7 @@ function renderSearchHistory() {
     // append to forecast section
   }
   
-  // Function to display 5 day forecast.
+  // Function to display 5 day forecast. ❌
   function renderForecast(dailyForecast) {
   // set up elements for this section
     
@@ -101,7 +107,7 @@ function renderSearchHistory() {
   }
   
   // Fetches weather data for given location from the Weather Geolocation
-  // endpoint; then, calls functions to display current and forecast weather data.
+  // endpoint; then, calls functions to display current and forecast weather data. ❌
   function fetchWeather(location) {
     // varialbles of longitude, latitude, city name - coming from location
   
@@ -115,27 +121,32 @@ function renderSearchHistory() {
     // variable for you api url
   
     // fetch with your url, .then that returns the response in json, .then that does 2 things - calls appendToHistory(search), calls fetchWeather(the data)
-  
+    appendToHistory(search);
   }
   
+  // ✅
   function handleSearchFormSubmit(e) {
     // Don't continue if there is nothing in the search form
-    if (!searchInput.value) {
+    if (!searchInputEl.value) {
       return;
     }
   
     e.preventDefault();
-    var search = searchInput.value.trim();
+    var search = searchInputEl.value.trim();
     fetchCoords(search);
-    searchInput.value = '';
+    searchInputEl.value = '';
   }
   
+  // ✅
   function handleSearchHistoryClick(e) {
     // grab whatever city is is they clicked
     
     fetchCoords(search);
   }
   
+  localStorage.setItem("history", JSON.stringify(["atlanta", "denver"]));
   initSearchHistory();
-  // click event to run the handleFormSubmit 
+  // click event to run the handleFormSubmit ✅
+  submitButton.addEventListener("click", handleSearchFormSubmit);
+
   // click event to run the handleSearchHistoryClick
