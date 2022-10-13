@@ -1,0 +1,81 @@
+/* 
+Global attributes begin here 
+*/
+:root {
+    --primary: #7f47af;
+    --primary50: #7e47ae80;
+    --secondary: #bd2076;
+    --light: #e3dce9;
+    --dark: #21142c;
+    --invis: #ffffff00;
+}
+
+* {
+    color: var(--dark);
+}
+
+/*
+Header starts here
+*/
+header {
+    background-image: linear-gradient(to right, var(--primary50), var(--primary));
+    border-bottom: 10px solid var(--primary);
+    color: var(--secondary);
+    padding: 16px 0;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+/*
+Main starts here
+*/
+main {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--light);
+}
+
+/*
+Search form starts here
+*/
+.twenty-two {
+    width: 22%;
+}
+
+aside * {
+    border: 2px solid rgba(0,0,0,0.5);
+}
+
+aside > * {     /* margins + display parameters */
+    border: 2px solid rgba(0,0,0,0.5);
+    margin: 0 4px;
+    padding: 10px 0;
+    row-gap: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+input {
+    background-color: var(--light);
+}
+
+/*
+Weather and Forecast sections starts here
+*/
+.sixty-seven {
+    width: 67%;
+}
+
+h2 {
+    padding-top: 4px;
+    font-size: 20px;
+}
+
+.sixty-seven > * {
+    border: 2px solid rgba(0,0,0,0.5);
+    margin: 10px;
+}
