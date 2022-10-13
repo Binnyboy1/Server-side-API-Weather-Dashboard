@@ -126,12 +126,13 @@ function renderSearchHistory() {
   
   // ✅
   function handleSearchFormSubmit(e) {
+    e.preventDefault();
+
     // Don't continue if there is nothing in the search form
     if (!searchInputEl.value) {
       return;
     }
   
-    e.preventDefault();
     var search = searchInputEl.value.trim();
     fetchCoords(search);
     searchInputEl.value = '';
