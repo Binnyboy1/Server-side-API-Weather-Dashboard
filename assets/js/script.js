@@ -152,7 +152,7 @@ function renderSearchHistory() {
   // ✅
   function fetchCoords(search) {
     // variable for your api url
-    var geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=${apiKey}`;
+    var geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=${apiKey}`;
     // var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=" + workingKey;
   
     // fetch with your url
