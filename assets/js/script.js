@@ -5,7 +5,6 @@ var historyArr = [];
 // var apiURL = "";
 // api key
 var apiKey = "56ad1233636b0bba431cc36ab67b1e36";
-var workingKey = "bdd27e1d7a97f67b1f92d2980334ed0f";
 
 // DOM element references
 // search form
@@ -61,9 +60,21 @@ function renderSearchHistory() {
   // Function to display the CURRENT weather data fetched from OpenWeather api. ❌
   function renderCurrentWeather(city, weather) {
     // Store response data from our fetch request in variables
-      // temperature, wind speed, etc.
+    var temp = weather.main.temp + "°F";
+    var wind = weather.wind.speed + " MPH";
+    var humidity = weather.main.humidity + "%";
+    var iconUrl = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather.weather[0].icon}.svg`;
   
-  
+    weatherEl.innerHTML = "";
+    weatherEl.innerHTML += `
+    <div id="psuedo-header">
+      <h1>${city} (${dayjs(weather.dt * 1000).format('MM/DD/YYYY')})</h1>
+      <img src=${iconUrl} class="icon" alt="${weather.weather[0].description}">
+    </div>
+    <p>Temp: ${temp}</p>
+    <p>Wind: ${wind}</p>
+    <p>Humidity: ${humidity}</p>
+    `
     // document.create the elements you'll want to put this information in  
   
     // append those elements somewhere
@@ -116,7 +127,8 @@ function renderSearchHistory() {
     var city = location[0].name;
   
     // api url
-    var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon +"&exclude=hourly,daily&appid=" + workingKey;
+    var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${apiKey}`;
+    // var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon +"&exclude=hourly,daily&units=imperial&appid=" + workingKey;
   
     // fetch, using the api url
     fetch(weatherUrl)
@@ -140,7 +152,8 @@ function renderSearchHistory() {
   // ✅
   function fetchCoords(search) {
     // variable for your api url
-    var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=" + workingKey;
+    var geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=${apiKey}`;
+    // var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=" + workingKey;
   
     // fetch with your url
     fetch(geoUrl)

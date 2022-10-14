@@ -80,4 +80,25 @@ h2 {
 .sixty-seven > * {
     border: 2px solid rgba(0,0,0,0.5);
     margin: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.sixty-seven > * > *{
+    margin: 10px 0;
+}
+
+#psuedo-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon {
+    width: 28px;
+    height: min-content;
+    /* border: 3px solid red; */
 }
