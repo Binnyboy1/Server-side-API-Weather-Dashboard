@@ -3,7 +3,7 @@ Global attributes begin here
 */
 :root {
     --primary: #7f47af;
-    --primary50: rgba(126, 71, 175, 0.5);
+    --primary75: rgba(126, 71, 175, 0.75);
     --secondary: #501b7e;
     --light: #e3dce9;
     --dark: #21142c;
@@ -72,14 +72,25 @@ aside > * {     /* margins + display parameters */
 input {
     background-color: var(--light);
     padding: 5px;
+    border-radius: 5px;
+}
+
+#submit {
+    background-color: var(--primary);
+    border: 2px solid var(--light);
+    color: var(--light);
 }
 
 button {
+    background-color: var(--primary75);
+    border: 2px solid var(--light);
+    color: var(--light);
     padding: 5px;
+    border-radius: 5px;
 }
 
 form {
-    border-bottom: 2px solid var(--primary);
+    border-bottom: 3px solid var(--primary75);
 }
 
 /*
@@ -129,8 +140,12 @@ h2 {
 }
 
 .card {
-    background-color: var(--primary50);
+    background-color: var(--primary75);
     padding: 0 5px;
+}
+
+.card * {
+    color: var(--light);
 }
 
 .icon {
