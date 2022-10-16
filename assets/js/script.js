@@ -1,8 +1,6 @@
 // Global variables
 // search history as an empty array
 var historyArr = [];
-// weather api root url
-// var apiURL = "";
 // api key
 var apiKey = "56ad1233636b0bba431cc36ab67b1e36";
 
@@ -12,9 +10,9 @@ var searchFormEl = document.querySelector('form');
 // search input
 var searchInputEl = document.querySelector('input');
 // container/section for today's weather
-var weatherEl = document.querySelector('#weather');
+var weatherEl = document.querySelector('.weather');
 // container/section for the forecast 
-var forecastEl = document.querySelector('#forecast');
+var forecastEl = document.querySelector('.forecast');
 // search history container
 var searchHistoryEl = document.querySelector('#history');
 // submit button
@@ -57,7 +55,7 @@ function renderSearchHistory() {
     }
   }
   
-  // Function to display the CURRENT weather data fetched from OpenWeather api. ❌
+  // Function to display the CURRENT weather data fetched from OpenWeather api. ✅
   function renderCurrentWeather(city, weather) {
     // Store response data from our fetch request in variables
     var temp = weather.main.temp + "°F";
@@ -65,7 +63,7 @@ function renderSearchHistory() {
     var humidity = weather.main.humidity + "%";
     var iconUrl = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather.weather[0].icon}.svg`;
   
-    weatherEl.innerHTML = "";
+    // Render items
     weatherEl.innerHTML += `
     <div id="psuedo-header">
       <h1>${city} (${dayjs(weather.dt * 1000).format('MM/DD/YYYY')})</h1>
@@ -75,47 +73,88 @@ function renderSearchHistory() {
     <p>Wind: ${wind}</p>
     <p>Humidity: ${humidity}</p>
     `
-    // document.create the elements you'll want to put this information in  
-  
-    // append those elements somewhere
-  
-    // give them their appropriate content
   }
   
-  // Function to display a FORECAST card given an object (from our renderForecast function) from open weather api ❌
+  // Function to display a FORECAST card given an object (from our renderForecast function) from open weather api ✅
   // daily forecast.
-  function renderForecastCard(forecast) {
+  function renderForecastCard(dailyForecast) {
     // variables for data from api
-      // temp, windspeed, etc.
-  
-    // Create elements for a card
-  
-    // append
-  
-    // Add content to elements
-  
-    // append to forecast section
+    var temp = dailyForecast.main.temp + "°F";
+    var wind = dailyForecast.wind.speed + " MPH";
+    var humidity = dailyForecast.main.humidity + "%";
+    var iconUrl = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${dailyForecast.weather[0].icon}.svg`;
+
+    // Render items
+    forecastEl.innerHTML += `
+    <div class="card">
+      <h2>${dayjs(dailyForecast.dt * 1000).format('MM/DD/YYYY')}</h2>
+      <img src=${iconUrl} class="icon" alt="${dailyForecast.weather[0].description}">
+      <p>Temp: ${temp}</p>
+      <p>Wind: ${wind}</p>
+      <p>Humidity: ${humidity}</p>
+    </div>
+    `
   }
   
-  // Function to display 5 day forecast. ❌
-  function renderForecast(dailyForecast) {
+  // Function to display 5 day forecast. ✅
+  function renderForecast(dailyForecast, currDate) {
     // set up elements for this section
+    var lat = dailyForecast.coord.lat;
+    var lon = dailyForecast.coord.lon;
+    var dailyUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
 
-    // append
-    
-    // loop over dailyForecast
-  
-    // for (var i = 0; i < dailyForecast.length; i++) {
-  
-    //   // send the data to our renderForecast function as an argument
-    //       renderForecastCard(dailyForecast[i]);
+    fetch(dailyUrl)
+      // .then that returns the response as json
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      // .then that calls dailyForecast(data)
+      .then(function (data) {
+        if (data.length !== 0) {
+          // retrieve dates for the next 5 days
+          var dateList = [];
+          for (var i = 1; i <= 5; i++) {
+            dateList.push(dayjs((86400*i + dayjs(currDate).unix()) * 1000).unix());
+          }
+
+          // retrieve data on those specified dates
+          var dataList = [];
+          var dateListIndex = 0;
+          for (var i = 0; i < data.list.length; i++) {
+            // if the time matches up, save the date data
+            if (data.list[i].dt > dateList[dateListIndex]) {
+              dataList.push(data.list[i]);
+              dateListIndex++;
+            } 
+            // if there isn't a 5th match by the end of the list, add the final one anyways (won't be the same hour as the others, but as long as it's the same day, that's all that matters)
+            else if (i == data.list.length - 1 && dateListIndex == 4) {
+              dataList.push(data.list[i]);
+              dateListIndex++;
+            }
+          }
+
+          // loop over dailyForecast
+          for (var i = 0; i < 5; i++) {
+            // send the data to our renderForecast function as an argument
+            renderForecastCard(dataList[i]);
+          }
+        }
+      })
+      .catch(function (error) {
+        alert("Weather error: \n" + error);
+      });
   }
   
   // ✅
   function renderItems(city, data) {
-    console.log(data);
+    forecastEl.innerHTML = "";
+    weatherEl.innerHTML = "";
+
+    var date = dayjs(data.dt * 1000).format('YYYY-MM-DD HH');
     renderCurrentWeather(city, data);
-    renderForecast(data);
+    renderForecast(data, date);
   }
   
   // Fetches weather data for given location from the Weather Geolocation
@@ -128,7 +167,6 @@ function renderSearchHistory() {
   
     // api url
     var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${apiKey}`;
-    // var weatherUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon +"&exclude=hourly,daily&units=imperial&appid=" + workingKey;
   
     // fetch, using the api url
     fetch(weatherUrl)
@@ -153,7 +191,6 @@ function renderSearchHistory() {
   function fetchCoords(search) {
     // variable for your api url
     var geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=${apiKey}`;
-    // var geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=" + workingKey;
   
     // fetch with your url
     fetch(geoUrl)
@@ -192,11 +229,10 @@ function renderSearchHistory() {
   // ✅
   function handleSearchHistoryClick(e) {
     // grab whatever city is is they clicked
-    
     fetchCoords(search);
   }
   
-  localStorage.setItem("history", JSON.stringify(["atlanta", "denver"]));
+  localStorage.setItem("history", JSON.stringify([]));
   initSearchHistory();
   // click event to run the handleFormSubmit ✅
   submitButton.addEventListener("click", handleSearchFormSubmit);
