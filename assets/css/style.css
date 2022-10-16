@@ -16,6 +16,7 @@ Global attributes begin here
 
 body {
     background-color: var(--light);
+    overflow: hidden;
 }
 
 /*
@@ -24,11 +25,19 @@ Header starts here
 header {
     background-image: linear-gradient(to right, var(--secondary), var(--primary));
     border-bottom: 10px solid var(--primary);
+    height: 70px;
+    position: relative;
+}
+
+header > * > h1 {
+    color: var(--light);
     padding: 16px 0;
 }
 
-header * {
-    color: var(--light);
+.weather-header {
+    position: absolute;
+    left: -264px;
+    white-space: nowrap;
 }
 
 h1 {

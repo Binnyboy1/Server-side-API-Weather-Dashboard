@@ -231,6 +231,18 @@ function renderSearchHistory() {
     // grab whatever city is is they clicked
     fetchCoords(search);
   }
+
+  // Bonus: Header text rotisserie set up
+  setInterval(function() {
+    var headerEl = document.querySelector(".weather-header");
+    headerEl.style.left = headerEl.offsetLeft + 1 + "px";
+
+    var posLeft = Number(headerEl.style.left.replace(/px$/, ''));
+    if (posLeft > window.innerWidth) {
+      headerEl.style.left = "-264px";
+    }
+  }, 8);
+  // Learned from https://www.tutorialspoint.com/how-to-create-a-moving-div-using-javascript 
   
   localStorage.setItem("history", JSON.stringify([]));
   initSearchHistory();
