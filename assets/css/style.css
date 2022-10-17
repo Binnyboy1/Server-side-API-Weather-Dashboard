@@ -3,9 +3,9 @@ Global attributes begin here
 */
 :root {
     --primary: #7f47af;
-    --primary75: rgba(126, 71, 175, 0.75);
+    --primary25: rgba(126, 71, 175, 0.25);
     --secondary: #501b7e;
-    --light: #e3dce9;
+    --light: #ede7f3;
     --dark: #21142c;
     --invis: #ffffff00;
 }
@@ -82,15 +82,15 @@ input {
 }
 
 button {
-    background-color: var(--primary75);
+    background-color: var(--primary25);
     border: 2px solid var(--light);
-    color: var(--light);
+    color: var(--dark);
     padding: 5px;
     border-radius: 5px;
 }
 
 form {
-    border-bottom: 3px solid var(--primary75);
+    border-bottom: 3px solid var(--primary25);
 }
 
 /*
@@ -140,16 +140,16 @@ h2 {
 }
 
 .card {
-    background-color: var(--primary75);
+    background-color: var(--primary25);
     padding: 0 5px;
-}
-
-.card * {
-    color: var(--light);
 }
 
 .icon {
     width: 28px;
     height: min-content;
     margin: 0;
+}
+
+@media screen and (max-width: 972px) {
+
 }
