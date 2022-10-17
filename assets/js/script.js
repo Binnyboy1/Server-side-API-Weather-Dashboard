@@ -18,7 +18,6 @@ var searchHistoryEl = document.querySelector('#history');
 // submit button
 var submitButton = document.querySelector('#submit');
 
-
 // Function to display the search history list. ✅
 function renderSearchHistory() {
     // empty the search history container
@@ -27,7 +26,7 @@ function renderSearchHistory() {
     // loop through the history array creating a button for each item
     for (var i = 0; i < historyArr.length; i++) {
         // append to the search history container
-        searchHistoryEl.innerHTML += `<button>${historyArr[i]}</button>`;
+        searchHistoryEl.innerHTML += `<button class="history-button">${historyArr[i]}</button>`;
     }
   }
   
@@ -188,7 +187,7 @@ function renderSearchHistory() {
   }
 
   // ✅
-  function fetchCoords(search) {
+  function fetchCoords(search, repeat = false) {
     // variable for your api url
     var geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=${apiKey}`;
   
@@ -203,7 +202,9 @@ function renderSearchHistory() {
       // .then that does 2 things - calls appendToHistory(search), calls fetchWeather(the data)
       .then(function (data) {
         if (data.length !== 0) {
-          appendToHistory(search);
+          if (repeat === false) {
+            appendToHistory(search);
+          }
           fetchWeather(data);
         }
       })
@@ -228,8 +229,13 @@ function renderSearchHistory() {
   
   // ✅
   function handleSearchHistoryClick(e) {
+    // if the clicked element is not a choice button, do nothing.
+    if (e.target.nodeName !== "BUTTON") {
+      return;
+    }
+
     // grab whatever city is is they clicked
-    fetchCoords(search);
+    fetchCoords(e.target.innerText, true);
   }
 
   // Bonus: Header text rotisserie set up
@@ -250,3 +256,4 @@ function renderSearchHistory() {
   submitButton.addEventListener("click", handleSearchFormSubmit);
 
   // click event to run the handleSearchHistoryClick
+  searchHistoryEl.addEventListener("click", handleSearchHistoryClick);
