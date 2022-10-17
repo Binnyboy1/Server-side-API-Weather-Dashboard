@@ -17,6 +17,8 @@ var forecastEl = document.querySelector('.forecast');
 var searchHistoryEl = document.querySelector('#history');
 // submit button
 var submitButton = document.querySelector('#submit');
+// start toggle
+var toggleContainer = document.querySelector('.sixty-seven');
 
 // Function to display the search history list. ✅
 function renderSearchHistory() {
@@ -144,6 +146,9 @@ function renderSearchHistory() {
       .catch(function (error) {
         alert("Weather error: \n" + error);
       });
+
+    // display everything
+    toggleContainer.style.display = "block";
   }
   
   // ✅
@@ -252,6 +257,7 @@ function renderSearchHistory() {
   
   localStorage.setItem("history", JSON.stringify([]));
   initSearchHistory();
+  toggleContainer.style.display = "none";
   // click event to run the handleFormSubmit ✅
   submitButton.addEventListener("click", handleSearchFormSubmit);
 
